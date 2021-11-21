@@ -167,7 +167,7 @@ func addLines(from, to time.Time) {
 					Title: []notionapi.RichText{
 						{
 							Text: notionapi.Text{
-								Content: fmt.Sprintf("%dh%d", evt.Start.Hour(), evt.Start.Minute()),
+								Content: fmt.Sprintf("%02dh%02d", evt.Start.Hour(), evt.Start.Minute()),
 							},
 						},
 					},
@@ -176,7 +176,7 @@ func addLines(from, to time.Time) {
 					Title: []notionapi.RichText{
 						{
 							Text: notionapi.Text{
-								Content: fmt.Sprintf("%dh%d", evt.Start.Hour(), evt.Start.Minute()),
+								Content: fmt.Sprintf("%02dh%02d", evt.Start.Hour(), evt.Start.Minute()),
 							},
 						},
 					},
