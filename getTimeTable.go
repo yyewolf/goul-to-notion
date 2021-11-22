@@ -66,6 +66,7 @@ func getTablePrimitive(token string, from, to int64) (response tableResponse) {
 	req.Header.Add("content-type", "application/json")
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
+		return
 	}
 
 	if resp.Header.Get("X-Token-Status") == "201" {
