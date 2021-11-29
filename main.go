@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
@@ -13,6 +14,8 @@ var client *notionapi.Client
 
 func main() {
 	client = notionapi.NewClient(notionapi.Token(notionSecret))
+	fmt.Println("Starting")
+	getVar()
 
 	dewIt()
 	doLoop()
@@ -57,8 +60,15 @@ func main() {
 func dewIt() {
 	emptyLines()
 	// We check what time it is
-	lastMonday := time.Now()
-	nextSunday := time.Now()
+	currentTime := time.Now()
+	if currentTime.Weekday() == time.Saturday {
+		currentTime = currentTime.Add(24 * time.Hour)
+	} else if currentTime.Weekday() == time.Sunday {
+		currentTime = currentTime.Add(48 * time.Hour)
+	}
+
+	lastMonday := currentTime
+	nextSunday := currentTime
 	for lastMonday.Weekday() != time.Monday {
 		lastMonday = lastMonday.AddDate(0, 0, -1)
 	}

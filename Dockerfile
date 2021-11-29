@@ -3,15 +3,18 @@ WORKDIR /app
 COPY go.mod ./
 COPY go.sum ./
 COPY *.go ./
-RUN go build -o /notionUpdater
+RUN export CGO_ENABLED=0 && go build -o /notionUpdater
 
 ##
 ## Deploy
 ##
-FROM gcr.io/distroless/base-debian10
+FROM alpine:3.14
 
 WORKDIR /
 
+RUN mkdir -p /data
+RUN chmod 777 /data
+
 COPY --from=build /notionUpdater /notionUpdater
 
-CMD ["/notionUpdater"]
+ENTRYPOINT ["/notionUpdater"]

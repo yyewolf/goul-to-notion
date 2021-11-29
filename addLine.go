@@ -39,9 +39,26 @@ func addLines(from, to time.Time) {
 		fmt.Println("table empty")
 		return
 	}
+
 	events := table.Data.Table.Plannings[0].Events
-	firstDay := events[0].Start.Day()
-	lastDay := events[len(events)-1].End.Day()
+
+	newE := events
+	for i := len(events) - 1; i > -1; i-- {
+		found := false
+		for _, g := range events[i].Groups {
+			if g.Name == "1A G32" || g.Name == "1A G3" {
+				found = true
+				break
+			}
+		}
+		if !found {
+			newE = append(newE[:i], newE[i+1:]...)
+		}
+	}
+	events = newE
+
+	firstDay := events[0].Start.YearDay()
+	lastDay := events[len(events)-1].End.YearDay()
 	var lines [][]tableEvent
 	var space = 30 * time.Minute
 	var earliest = events[0].Start
@@ -133,7 +150,7 @@ func addLines(from, to time.Time) {
 			}
 			origin := line[0].Start
 			for _, evt := range events {
-				if j-1 != evt.Start.Day()-firstDay {
+				if j-1 != evt.Start.YearDay()-firstDay {
 					continue
 				}
 				if timeToMin(evt.Start) == timeToMin(origin) {
